@@ -24,7 +24,7 @@ var api = new ParseServer({
   ios: {
     pfx: '', // The filename of private key and certificate in PFX or PKCS12 format from disk  
     passphrase: '', // optional password to your p12
-    cert: '/push/push.pem', // If not using the .p12 format, the path to the certificate PEM to load from disk
+    cert: __dirname + '/push/push.pem', // If not using the .p12 format, the path to the certificate PEM to load from disk
     key: '', // If not using the .p12 format, the path to the private key PEM to load from disk
     bundleId: 'com.ioconnect.reminder', // The bundle identifier associated with your app
     production: false // Specifies which APNS environment to connect to: Production (if true) or Sandbox
