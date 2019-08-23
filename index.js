@@ -11,6 +11,16 @@ if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
 
+const PushAdapter = require('@parse/push-adapter').default;
+const pushOptions = {
+  ios: { 
+        pfx: __dirname + '/push/apnscertfinal.p12', // The filename of private key and certificate in PFX or PKCS12 format from disk  
+    passphrase: 'heptorcuevas', // optional password to your p12
+    bundleId: 'com.ioconnect.reminder', // The bundle identifier associated with your app
+    production: false // Specifies which APNS environment to connect to: Production (if true) or Sandbox
+  } 
+}
+
 var api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
@@ -21,15 +31,8 @@ var api = new ParseServer({
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
   },
   push: {
-  ios: {
-    pfx: '', // The filename of private key and certificate in PFX or PKCS12 format from disk  
-    passphrase: '', // optional password to your p12
-    cert: __dirname + '/push/push.pem', // If not using the .p12 format, the path to the certificate PEM to load from disk
-    key: '', // If not using the .p12 format, the path to the private key PEM to load from disk
-    bundleId: 'com.ioconnect.reminder', // The bundle identifier associated with your app
-    production: false // Specifies which APNS environment to connect to: Production (if true) or Sandbox
-  }
-}
+    adapter: new PushAdapter(pushOptions),
+  },
 });
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
